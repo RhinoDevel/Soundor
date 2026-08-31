@@ -242,6 +242,58 @@ namespace Soundor
             return newVal;
         }
 
+        static double GetNewValFreqOrNote(
+            string title, double curVal, double min, double max)
+        {
+            Debug.Assert(min < max);
+
+            string curStr = GetStr(curVal!);
+            string newStr;
+            double newVal;
+            int offset;
+
+            offset = DrawEntry(curVal, min, max);
+            DrawStatus($"Selected {title}.");
+
+            Console.SetCursorPosition(offset + curStr.Length, _topEntry);
+
+            newStr = ReadEntry(curStr, 78);
+
+            if (!double.TryParse(newStr, out newVal))
+            {
+                // Does not seem to be a floating-point value.
+
+                if (!Note.TryParseFreq(newStr, out newVal))
+                {
+                    // Also does not seem to be a musical note being entered.
+
+                    DrawEntry(curStr); // (because of length limit)
+                    DrawStatus($"Reused current {title} (invalid input).");
+                    return curVal;
+                }
+            }
+
+            // (because of length limit)
+            newStr = GetStr(newVal);
+            newVal = double.Parse(newStr);
+
+            if (newVal < min || max < newVal)
+            {
+                DrawEntry(curStr); // (because of length limit)
+                DrawStatus($"Reused current {title} (input out of range).");
+                return curVal;
+            }
+            if (newVal == curVal)
+            {
+                DrawEntry(curStr); // (because of length limit)
+                DrawStatus($"Kept current {title} (no change).");
+                return curVal;
+            }
+            DrawEntry(newStr); // (because of length limit)
+            DrawStatus($"Changed {title}.");
+            return newVal;
+        }
+
         static ulong GetNewValUlong(
             string title, ulong curVal, ulong min, ulong max)
         {
@@ -387,7 +439,7 @@ namespace Soundor
                     }
                     case ConsoleKey.F:
                     {
-                        p.SignalFreqHz = GetNewValDbl(
+                        p.SignalFreqHz = GetNewValFreqOrNote(
                             "signal frequency",
                             p.SignalFreqHz,
                             Helper.AudioRangeMinHz,
