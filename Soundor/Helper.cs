@@ -40,7 +40,7 @@ namespace Soundor
                 short.MaxValue);
         }
 
-        internal static void SaveAsWav(
+        internal static bool SaveAsWav(
             string filename, double[] samples, ulong rateHz)
         {
             const ushort channels = 1;
@@ -49,30 +49,38 @@ namespace Soundor
             var sampleRate = checked((uint)rateHz);
             var dataSize = checked((uint)(samples.Length * 2));
 
-            using var stream = File.Create(filename);
-            using var writer = new BinaryWriter(stream);
-
-            writer.Write("RIFF"u8);
-            writer.Write(checked(36u + dataSize));
-            writer.Write("WAVE"u8);
-
-            writer.Write("fmt "u8);
-            writer.Write(16u); // PCM format chunk size.
-            writer.Write((ushort)1); // PCM
-            writer.Write(channels);
-            writer.Write(sampleRate);
-            writer.Write(sampleRate * channels * (bitsPerSample / 8));
-            writer.Write((ushort)(channels * (bitsPerSample / 8)));
-            writer.Write(bitsPerSample);
-
-            writer.Write("data"u8);
-            writer.Write(dataSize);
-
-            foreach (var sample in samples)
+            try
             {
-                // Expects samples from -1 to 1, but GetPcm16() clamps..
-                var value = GetPcm16(sample);
-                writer.Write(value);
+                using var stream = File.Create(filename);
+                using var writer = new BinaryWriter(stream);
+
+                writer.Write("RIFF"u8);
+                writer.Write(checked(36u + dataSize));
+                writer.Write("WAVE"u8);
+
+                writer.Write("fmt "u8);
+                writer.Write(16u); // PCM format chunk size.
+                writer.Write((ushort)1); // PCM
+                writer.Write(channels);
+                writer.Write(sampleRate);
+                writer.Write(sampleRate * channels * (bitsPerSample / 8));
+                writer.Write((ushort)(channels * (bitsPerSample / 8)));
+                writer.Write(bitsPerSample);
+
+                writer.Write("data"u8);
+                writer.Write(dataSize);
+
+                foreach (var sample in samples)
+                {
+                    // Expects samples from -1 to 1, but GetPcm16() clamps..
+                    var value = GetPcm16(sample);
+                    writer.Write(value);
+                }
+                return true;
+            }
+            catch(Exception /*e*/)
+            {
+                return false;
             }
         }
 
