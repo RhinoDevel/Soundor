@@ -506,8 +506,12 @@ namespace Soundor
                             DrawStatus("Did not save/overwrite output (WAV) file.");
                             break;
                         }
-                        Helper.SaveAsWav(
-                            outputWav, samples, samplingRateHz);
+                        if(!Helper.SaveAsWav(
+                                outputWav, samples, samplingRateHz))
+                        {
+                            DrawStatus("Failed to save to (WAV) file.");
+                            break;
+                        }
                         DrawStatus("Saved to output (WAV) file.");
                         break;
                     }
