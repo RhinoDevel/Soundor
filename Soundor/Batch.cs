@@ -79,9 +79,14 @@ namespace Soundor
             {
                 for(int i = 0; i < (int)effectAndCount.Item2; ++i)
                 {
-                    samples[pos++] = effectAndCount.Item1[i];
+                    for (int j = 0; j < effectAndCount.Item1.Length; ++j)
+                    {
+                        samples[pos++] = effectAndCount.Item1[j];
+                    }
                 }
             }
+
+            //Helper.Play(samples, bp.SamplingRate);
 
             if(!Helper.SaveAsWav(bp.OutputWav, samples, bp.SamplingRate))
             {
