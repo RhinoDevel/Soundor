@@ -39,8 +39,6 @@ namespace Soundor
                 return false;
             }
 
-            // TODO: Implement!
-
             sampleCount = 0;
             effectAndCounts = new();
             for(int i = 0; i < bp.Data.Count; ++i)
