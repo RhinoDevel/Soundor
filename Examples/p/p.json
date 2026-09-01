@@ -1,0 +1,14 @@
+﻿{
+    "samplingRate": 44100,
+    "data": [
+        {
+            "inputJson": "p_1.json",
+            "count": 4
+        },
+        {
+            "inputJson": "p_2.json",
+            "count": 1
+        }
+    ],
+    "outputWav": "p.wav"
+}

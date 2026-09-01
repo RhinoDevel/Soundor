@@ -1,0 +1,8 @@
+{
+  "durationMs": 870,
+  "signalFreqHz": 880,
+  "attack": 0.01,
+  "decay": 0.01,
+  "sustain": 0.4,
+  "release": 0.5
+}
