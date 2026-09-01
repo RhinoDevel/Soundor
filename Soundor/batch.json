@@ -1,0 +1,10 @@
+﻿{
+    "samplingRate": 44100,
+    "data": [
+        {
+            "inputJson": "input.json",
+            "count": 4
+        }
+    ],
+    "outputWav": "output.json"
+}
