@@ -103,22 +103,22 @@ namespace Soundor
             Console.WriteLine($"* RhinoDevel presents: SOUNDOR - Master Of The Effects                    {_year} *"); ++line;
             Console.WriteLine("********************************************************************************"); ++line;
             Console.WriteLine("* [I]nput file (JSON):                                                         *"); ++line;
-            DrawEmptyLine(line++, true);
             Console.WriteLine("* [D]uration (ms):                                                             *"); ++line;
-            Console.WriteLine("* Signal [f]requency (Hz):                                                     *"); ++line;
+            Console.WriteLine("* Signal start [f]req. (Hz):                                                   *"); ++line;
+            Console.WriteLine("* Signal e[n]d frequency (Hz):                                                 *"); ++line;
             Console.WriteLine("* A[t]tack (part of duration):                                                 *"); ++line;
             Console.WriteLine("* D[e]cay (part of duration):                                                  *"); ++line;
             Console.WriteLine("* S[u]stain (level):                                                           *"); ++line;
             Console.WriteLine("* Rele[a]se (part of duration):                                                *"); ++line;
-            DrawEmptyLine(line++, true);
             Console.WriteLine("* Sampling [r]ate (Hz):                                                        *"); ++line;
             Console.WriteLine("* [O]utput file (WAV):                                                         *"); ++line;
-            DrawEmptyLine(line++, true);
             Console.WriteLine("* [P]layback effect.                                                           *"); ++line;
             Console.WriteLine("* [L]oad from input file.                                                      *"); ++line;
             Console.WriteLine("* Sa[v]e to input file (JSON).                                                 *"); ++line;
             Console.WriteLine("* [S]ave to output file (WAV).                                                 *"); ++line;
             Console.WriteLine("* E[x]it Soundor.                                                              *"); ++line;
+            DrawEmptyLine(line++, true);
+            DrawEmptyLine(line++, true);
             Console.WriteLine("********************************************************************************"); ++line;
             Console.WriteLine("* >                                                                            *"); ++line;
             Console.WriteLine("********************************************************************************"); ++line;
@@ -147,18 +147,13 @@ namespace Soundor
 
             top = 3;
             DrawVal(top++, inputJson);
-
-            top += 1;
-
             DrawVal(top++, p.DurationMs);
-            DrawVal(top++, p.SignalFreqHz);
+            DrawVal(top++, p.SignalStartFreqHz);
+            DrawVal(top++, p.SignalEndFreqHz);
             DrawVal(top++, p.Attack);
             DrawVal(top++, p.Decay);
             DrawVal(top++, p.Sustain);
             DrawVal(top++, p.Release);
-
-            top += 1;
-
             DrawVal(top++, samplingRateHz);
             DrawVal(top++, outputWav);
         }
@@ -407,7 +402,10 @@ namespace Soundor
 
                 // Not always necessary, but for simplicity:
                 samples = new Sine().CreateSamples(
-                    p.DurationMs, samplingRateHz, p.SignalFreqHz);
+                    p.DurationMs,
+                    samplingRateHz,
+                    p.SignalStartFreqHz,
+                    p.SignalEndFreqHz);
                 samples = Adsr.Create(
                     samples, p.Attack, p.Decay, p.Sustain, p.Release);
 
@@ -439,9 +437,9 @@ namespace Soundor
                     }
                     case ConsoleKey.F:
                     {
-                        p.SignalFreqHz = GetNewValFreqOrNote(
-                            "signal frequency",
-                            p.SignalFreqHz,
+                        p.SignalStartFreqHz = GetNewValFreqOrNote(
+                            "signal start frequency",
+                            p.SignalStartFreqHz,
                             Helper.AudioRangeMinHz,
                             Helper.AudioRangeMaxHz);
                         DrawValues(p, inputJson, outputWav, samplingRateHz);
@@ -476,6 +474,16 @@ namespace Soundor
                         break;
                     }
 
+                    case ConsoleKey.N:
+                    {
+                        p.SignalEndFreqHz = GetNewValFreqOrNote(
+                            "signal end frequency",
+                            p.SignalEndFreqHz,
+                            Helper.AudioRangeMinHz,
+                            Helper.AudioRangeMaxHz);
+                        DrawValues(p, inputJson, outputWav, samplingRateHz);
+                        break;
+                    }
                     case ConsoleKey.O:
                     {
                         outputWav = GetNewValStr("output file", outputWav);

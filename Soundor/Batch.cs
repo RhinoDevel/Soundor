@@ -63,7 +63,8 @@ namespace Soundor
                 dataSamples = new Sine().CreateSamples(
                     p.DurationMs,
                     bp.SamplingRate, // TODO: Add min./max. check!
-                    p.SignalFreqHz);
+                    p.SignalStartFreqHz,
+                    p.SignalEndFreqHz);
 
                 dataSamples = Adsr.Create(
                     dataSamples, p.Attack, p.Decay, p.Sustain, p.Release);

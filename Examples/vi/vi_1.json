@@ -1,6 +1,7 @@
 {
   "durationMs": 290,
-  "signalFreqHz": 440,
+  "signalStartFreqHz": 440,
+  "signalEndFreqHz": 440,
   "attack": 0.1,
   "decay": 0.2,
   "sustain": 0.8,

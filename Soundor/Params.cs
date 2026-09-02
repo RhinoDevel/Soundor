@@ -11,7 +11,8 @@ namespace Soundor
     internal class Params
     {
         public ulong DurationMs { get; set; }
-        public double SignalFreqHz { get; set; }
+        public double SignalStartFreqHz { get; set; }
+        public double SignalEndFreqHz { get; set; }
         public double Attack { get; set; }
         public double Decay { get; set; }
         public double Sustain { get; set; }
@@ -22,7 +23,8 @@ namespace Soundor
             return new Params
             {
                 DurationMs = 400,
-                SignalFreqHz = 440.0,
+                SignalStartFreqHz = 440.0,
+                SignalEndFreqHz = 440.0,
                 Attack = 0.01,
                 Decay = 0.15,
                 Sustain = 0.05,
